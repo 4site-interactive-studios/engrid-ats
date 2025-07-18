@@ -17,8 +17,8 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, July 16, 2025 @ 13:36:47 ET
- *  By: michael
+ *  Date: Friday, July 18, 2025 @ 16:11:21 ET
+ *  By: fernando
  *  ENGrid styles: v0.22.4
  *  ENGrid scripts: v0.22.8
  *
@@ -975,7 +975,8 @@ exports.SignalList = SignalList;
   if (true) {
     // commonjs
     module.exports = { polyfill: polyfill };
-  } else {}
+  } else // removed by dead control flow
+{}
 
 }());
 
@@ -1305,7 +1306,8 @@ exports.DispatchError = DispatchError;
 
 	if(true){
 		module.exports=self;
-	} else {}
+	} else // removed by dead control flow
+{}
 }.call(this));
 
 
@@ -8106,7 +8108,8 @@ function getFormattedMessage(message) {
 
 var visitedMessages;
 
-if (false) {}
+if (false) // removed by dead control flow
+{}
 
 function resetVisitedMessages() {
   visitedMessages = new Set();
@@ -8193,7 +8196,8 @@ var defaultProps = Object.assign({
 var defaultKeys = Object.keys(defaultProps);
 var setDefaultProps = function setDefaultProps(partialProps) {
   /* istanbul ignore else */
-  if (false) {}
+  if (false) // removed by dead control flow
+{}
 
   var keys = Object.keys(partialProps);
   keys.forEach(function (key) {
@@ -8467,7 +8471,8 @@ function createTippy(reference, passedProps) {
   /* istanbul ignore if */
 
   if (!props.render) {
-    if (false) {}
+    if (false) // removed by dead control flow
+{}
 
     return instance;
   } // ===========================================================================
@@ -9016,7 +9021,8 @@ function createTippy(reference, passedProps) {
     createPopperInstance();
     /* istanbul ignore else */
 
-    if (false) {}
+    if (false) // removed by dead control flow
+{}
   }
 
   function getNestedPopperTree() {
@@ -9106,7 +9112,8 @@ function createTippy(reference, passedProps) {
 
   function setProps(partialProps) {
     /* istanbul ignore else */
-    if (false) {}
+    if (false) // removed by dead control flow
+{}
 
     if (instance.state.isDestroyed) {
       return;
@@ -9166,7 +9173,8 @@ function createTippy(reference, passedProps) {
 
   function show() {
     /* istanbul ignore else */
-    if (false) {} // Early bail-out
+    if (false) // removed by dead control flow
+{} // Early bail-out
 
 
     var isAlreadyVisible = instance.state.isVisible;
@@ -9257,7 +9265,8 @@ function createTippy(reference, passedProps) {
 
   function hide() {
     /* istanbul ignore else */
-    if (false) {} // Early bail-out
+    if (false) // removed by dead control flow
+{} // Early bail-out
 
 
     var isAlreadyHidden = !instance.state.isVisible;
@@ -9313,7 +9322,8 @@ function createTippy(reference, passedProps) {
 
   function hideWithInteractivity(event) {
     /* istanbul ignore else */
-    if (false) {}
+    if (false) // removed by dead control flow
+{}
 
     getDocument().addEventListener('mousemove', debouncedOnMouseMove);
     pushIfUnique(mouseMoveListeners, debouncedOnMouseMove);
@@ -9322,7 +9332,8 @@ function createTippy(reference, passedProps) {
 
   function unmount() {
     /* istanbul ignore else */
-    if (false) {}
+    if (false) // removed by dead control flow
+{}
 
     if (instance.state.isVisible) {
       instance.hide();
@@ -9353,7 +9364,8 @@ function createTippy(reference, passedProps) {
 
   function destroy() {
     /* istanbul ignore else */
-    if (false) {}
+    if (false) // removed by dead control flow
+{}
 
     if (instance.state.isDestroyed) {
       return;
@@ -9376,7 +9388,8 @@ function tippy(targets, optionalProps) {
   var plugins = defaultProps.plugins.concat(optionalProps.plugins || []);
   /* istanbul ignore else */
 
-  if (false) {}
+  if (false) // removed by dead control flow
+{}
 
   bindGlobalEventListeners();
   var passedProps = Object.assign({}, optionalProps, {
@@ -9385,7 +9398,8 @@ function tippy(targets, optionalProps) {
   var elements = getArrayOfElements(targets);
   /* istanbul ignore else */
 
-  if (false) { var isMoreThanOneReferenceElement, isSingleContentElement; }
+  if (false) // removed by dead control flow
+{ var isMoreThanOneReferenceElement, isSingleContentElement; }
 
   var instances = elements.reduce(function (acc, reference) {
     var instance = reference && createTippy(reference, passedProps);
@@ -9468,7 +9482,8 @@ var createSingleton = function createSingleton(tippyInstances, optionalProps) {
   }
 
   /* istanbul ignore else */
-  if (false) {}
+  if (false) // removed by dead control flow
+{}
 
   var individualInstances = tippyInstances;
   var references = [];
@@ -9673,7 +9688,8 @@ var BUBBLING_EVENTS_MAP = {
 
 function delegate(targets, props) {
   /* istanbul ignore else */
-  if (false) {}
+  if (false) // removed by dead control flow
+{}
 
   var listeners = [];
   var childTippyInstances = [];
@@ -9813,7 +9829,8 @@ var animateFill = {
 
     // @ts-ignore
     if (!((_instance$props$rende = instance.props.render) != null && _instance$props$rende.$$tippy)) {
-      if (false) {}
+      if (false) // removed by dead control flow
+{}
 
       return {};
     }
@@ -11447,35 +11464,45 @@ class engrid_ENGrid {
                 case "donation":
                 case "premiumgift":
                     return "DONATION";
-                    break;
+                    // removed by dead control flow
+{}
                 case "e-card":
                     return "ECARD";
-                    break;
+                    // removed by dead control flow
+{}
                 case "otherdatacapture":
                 case "survey":
                     return "SURVEY";
-                    break;
+                    // removed by dead control flow
+{}
                 case "emailtotarget":
                     return "EMAILTOTARGET";
-                    break;
+                    // removed by dead control flow
+{}
                 case "advocacypetition":
                     return "ADVOCACY";
-                    break;
+                    // removed by dead control flow
+{}
                 case "emailsubscribeform":
                     return "SUBSCRIBEFORM";
-                    break;
+                    // removed by dead control flow
+{}
                 case "event":
                     return "EVENT";
-                    break;
+                    // removed by dead control flow
+{}
                 case "supporterhub":
                     return "SUPPORTERHUB";
-                    break;
+                    // removed by dead control flow
+{}
                 case "unsubscribe":
                     return "UNSUBSCRIBE";
-                    break;
+                    // removed by dead control flow
+{}
                 case "tweetpage":
                     return "TWEETPAGE";
-                    break;
+                    // removed by dead control flow
+{}
                 default:
                     return "UNKNOWN";
             }
