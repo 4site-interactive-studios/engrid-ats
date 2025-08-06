@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, July 18, 2025 @ 16:11:21 ET
+ *  Date: Tuesday, August 5, 2025 @ 22:55:34 ET
  *  By: fernando
  *  ENGrid styles: v0.22.4
- *  ENGrid scripts: v0.22.8
+ *  ENGrid scripts: v0.22.10
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -15581,6 +15581,14 @@ class NeverBounce {
         this.logger = new logger_EngridLogger("NeverBounce", "#039bc4", "#dfdfdf", "📧");
         this.shouldRun = true;
         this.nbLoaded = false;
+        this.bypassEmails = [
+            "noaddress.ea",
+        ];
+        const searchParams = new URLSearchParams(window.location.search);
+        if (searchParams.has("bypassemailvalidation")) {
+            this.logger.log("Bypass Email Validation Enabled - not running NeverBounce");
+            return;
+        }
         this.emailField = document.getElementById("en__field_supporter_emailAddress");
         window._NBSettings = {
             apiKey: this.apiKey,
@@ -15721,6 +15729,10 @@ class NeverBounce {
             this.logger.log("E-mail Field Not Found");
             return;
         }
+        if (this.isBypassEmail()) {
+            this.logger.log("Bypass email detected. Skipping status update.");
+            return;
+        }
         // Search page for the NB Wrapper div and set as variable
         const nb_email_field_wrapper = (document.getElementById("nb-wrapper"));
         // Search page for the NB Feedback div and set as variable
@@ -15789,6 +15801,12 @@ class NeverBounce {
         (_a = el.parentNode) === null || _a === void 0 ? void 0 : _a.insertBefore(wrapper, el);
         wrapper.appendChild(el);
     }
+    isBypassEmail() {
+        if (!this.emailField || !this.emailField.value)
+            return false;
+        const email = this.emailField.value.toLowerCase();
+        return this.bypassEmails.some((bypassEmail) => email.includes(bypassEmail.toLowerCase()));
+    }
     validate() {
         var _a;
         if (!this.form.validate)
@@ -15796,6 +15814,10 @@ class NeverBounce {
         const nbResult = engrid_ENGrid.getFieldValue("nb-result");
         if (!this.emailField || !this.shouldRun || !this.nbLoaded || !nbResult) {
             this.logger.log("validate(): Should Not Run. Returning true.");
+            return;
+        }
+        if (this.isBypassEmail()) {
+            this.logger.log("Bypass email detected. Skipping validation.");
             return;
         }
         if (this.nbStatus) {
@@ -16926,68 +16948,50 @@ class DataLayer {
         return "";
     }
     onLoad() {
+        // Collect all data layer events and variables to push at once
+        const dataLayerData = {};
+        const dataLayerEvents = [];
         if (engrid_ENGrid.getGiftProcess()) {
             this.logger.log("EN_SUCCESSFUL_DONATION");
-            this.dataLayer.push({
-                event: "EN_SUCCESSFUL_DONATION",
-            });
+            dataLayerEvents.push("EN_SUCCESSFUL_DONATION");
             this.addEndOfGiftProcessEventsToDataLayer();
         }
         else {
             this.logger.log("EN_PAGE_VIEW");
-            this.dataLayer.push({
-                event: "EN_PAGE_VIEW",
-            });
+            dataLayerEvents.push("EN_PAGE_VIEW");
         }
         if (window.pageJson) {
             const pageJson = window.pageJson;
             for (const property in pageJson) {
                 if (!Number.isNaN(pageJson[property])) {
-                    this.dataLayer.push({
-                        event: `EN_PAGEJSON_${property.toUpperCase()}-${pageJson[property]}`,
-                    });
-                    this.dataLayer.push({
-                        [`'EN_PAGEJSON_${property.toUpperCase()}'`]: pageJson[property],
-                    });
+                    dataLayerEvents.push(`EN_PAGEJSON_${property.toUpperCase()}-${pageJson[property]}`);
+                    dataLayerData[`'EN_PAGEJSON_${property.toUpperCase()}'`] =
+                        pageJson[property];
                 }
                 else {
-                    this.dataLayer.push({
-                        event: `EN_PAGEJSON_${property.toUpperCase()}-${this.transformJSON(pageJson[property])}`,
-                    });
-                    this.dataLayer.push({
-                        [`'EN_PAGEJSON_${property.toUpperCase()}'`]: this.transformJSON(pageJson[property]),
-                    });
+                    dataLayerEvents.push(`EN_PAGEJSON_${property.toUpperCase()}-${this.transformJSON(pageJson[property])}`);
+                    dataLayerData[`'EN_PAGEJSON_${property.toUpperCase()}'`] =
+                        this.transformJSON(pageJson[property]);
                 }
-                this.dataLayer.push({
-                    event: "EN_PAGEJSON_" + property.toUpperCase(),
-                    eventValue: pageJson[property],
-                });
+                dataLayerEvents.push("EN_PAGEJSON_" + property.toUpperCase());
+                dataLayerData.eventValue = pageJson[property];
             }
             if (engrid_ENGrid.getPageCount() === engrid_ENGrid.getPageNumber()) {
-                this.dataLayer.push({
-                    event: "EN_SUBMISSION_SUCCESS_" + pageJson.pageType.toUpperCase(),
-                });
-                this.dataLayer.push({
-                    [`'EN_SUBMISSION_SUCCESS_${pageJson.pageType.toUpperCase()}'`]: "TRUE",
-                });
+                dataLayerEvents.push("EN_SUBMISSION_SUCCESS_" + pageJson.pageType.toUpperCase());
+                dataLayerData[`'EN_SUBMISSION_SUCCESS_${pageJson.pageType.toUpperCase()}'`] = "TRUE";
             }
         }
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.forEach((value, key) => {
-            this.dataLayer.push({
-                event: `EN_URLPARAM_${key.toUpperCase()}-${this.transformJSON(value)}`,
-            });
-            this.dataLayer.push({
-                [`'EN_URLPARAM_${key.toUpperCase()}'`]: this.transformJSON(value),
-            });
+            dataLayerEvents.push(`EN_URLPARAM_${key.toUpperCase()}-${this.transformJSON(value)}`);
+            dataLayerData[`'EN_URLPARAM_${key.toUpperCase()}'`] =
+                this.transformJSON(value);
         });
         if (engrid_ENGrid.getPageType() === "DONATION") {
             const recurrFreqEls = document.querySelectorAll('[name="transaction.recurrfreq"]');
             const recurrValues = [...recurrFreqEls].map((el) => el.value);
-            this.dataLayer.push({
-                event: "EN_RECURRING_FREQUENCIES",
-                [`'EN_RECURRING_FREQEUENCIES'`]: recurrValues,
-            });
+            dataLayerEvents.push("EN_RECURRING_FREQUENCIES");
+            dataLayerData[`'EN_RECURRING_FREQEUENCIES'`] = recurrValues;
         }
         let fastFormFill = false;
         // Fast Form Fill - Personal Details
@@ -16996,20 +17000,14 @@ class DataLayer {
             const allPersonalMandatoryInputsAreFilled = FastFormFill.allMandatoryInputsAreFilled(fastPersonalDetailsFormBlock);
             const somePersonalMandatoryInputsAreFilled = FastFormFill.someMandatoryInputsAreFilled(fastPersonalDetailsFormBlock);
             if (allPersonalMandatoryInputsAreFilled) {
-                this.dataLayer.push({
-                    event: "EN_FASTFORMFILL_PERSONALINFO_SUCCESS",
-                });
+                dataLayerEvents.push("EN_FASTFORMFILL_PERSONALINFO_SUCCESS");
                 fastFormFill = true;
             }
             else if (somePersonalMandatoryInputsAreFilled) {
-                this.dataLayer.push({
-                    event: "EN_FASTFORMFILL_PERSONALINFO_PARTIALSUCCESS",
-                });
+                dataLayerEvents.push("EN_FASTFORMFILL_PERSONALINFO_PARTIALSUCCESS");
             }
             else {
-                this.dataLayer.push({
-                    event: "EN_FASTFORMFILL_PERSONALINFO_FAILURE",
-                });
+                dataLayerEvents.push("EN_FASTFORMFILL_PERSONALINFO_FAILURE");
             }
         }
         // Fast Form Fill - Address Details
@@ -17018,31 +17016,29 @@ class DataLayer {
             const allAddressMandatoryInputsAreFilled = FastFormFill.allMandatoryInputsAreFilled(fastAddressDetailsFormBlock);
             const someAddressMandatoryInputsAreFilled = FastFormFill.someMandatoryInputsAreFilled(fastAddressDetailsFormBlock);
             if (allAddressMandatoryInputsAreFilled) {
-                this.dataLayer.push({
-                    event: "EN_FASTFORMFILL_ADDRESS_SUCCESS",
-                });
+                dataLayerEvents.push("EN_FASTFORMFILL_ADDRESS_SUCCESS");
                 fastFormFill = fastFormFill ? true : false; // Only set to true if it was true before
             }
             else if (someAddressMandatoryInputsAreFilled) {
-                this.dataLayer.push({
-                    event: "EN_FASTFORMFILL_ADDRESS_PARTIALSUCCESS",
-                });
+                dataLayerEvents.push("EN_FASTFORMFILL_ADDRESS_PARTIALSUCCESS");
             }
             else {
-                this.dataLayer.push({
-                    event: "EN_FASTFORMFILL_ADDRESS_FAILURE",
-                });
+                dataLayerEvents.push("EN_FASTFORMFILL_ADDRESS_FAILURE");
             }
         }
         if (fastFormFill) {
-            this.dataLayer.push({
-                event: "EN_FASTFORMFILL_ALL_SUCCESS",
-            });
+            dataLayerEvents.push("EN_FASTFORMFILL_ALL_SUCCESS");
         }
         else {
-            this.dataLayer.push({
-                event: "EN_FASTFORMFILL_ALL_FAILURE",
-            });
+            dataLayerEvents.push("EN_FASTFORMFILL_ALL_FAILURE");
+        }
+        // Push all collected events individually (GTM requirement)
+        dataLayerEvents.forEach((event) => {
+            this.dataLayer.push({ event });
+        });
+        // Push all collected variables at once
+        if (Object.keys(dataLayerData).length > 0) {
+            this.dataLayer.push(dataLayerData);
         }
         this.attachEventListeners();
     }
@@ -22862,7 +22858,7 @@ class FrequencyUpsell {
 }
 
 ;// ./node_modules/@4site/engrid-scripts/dist/version.js
-const AppVersion = "0.22.8";
+const AppVersion = "0.22.10";
 
 ;// ./node_modules/@4site/engrid-scripts/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
@@ -23955,7 +23951,13 @@ const customScript = function (App, EnForm) {
 };
 ;// ./src/index.ts
  // Uses ENGrid via NPM
-// import { Options, App } from "../../engrid/packages/scripts"; // Uses ENGrid via Visual Studio Workspace
+// import {
+//   Options,
+//   App,
+//   DonationAmount,
+//   DonationFrequency,
+//   EnForm,
+// } from "../../engrid/packages/scripts"; // Uses ENGrid via Visual Studio Workspace
 
 
 
@@ -23985,7 +23987,7 @@ const options = {
   VGS: {
     "transaction.ccnumber": {
       showCardIcon: {
-        right: '20px'
+        right: "20px"
       }
     }
   }
