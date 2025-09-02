@@ -1,0 +1,97 @@
+// Variables for breakpoints (optional, for easier management)
+$breakpoint-stack: 1024px;
+
+.engrid-row {
+  // Use flexbox for layout
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+
+  // Stack columns vertically on small screens
+  @media (max-width: $breakpoint-stack) {
+    flex-direction: column;
+  }
+}
+
+.engrid-col {
+  // Flex basis for equal width columns on larger screens
+  // flex-grow allows them to expand, flex-shrink allows them to shrink, 1fr-like behavior
+  flex: 1 1 0; // Takes available space equally, 0 basis to prevent initial width influencing
+  // Add padding if needed for gutters between columns (optional)
+  // padding: 0 15px;
+  // box-sizing: border-box; // If you add padding, include this for consistent sizing
+
+  // On small screens, ensure columns take full width
+  @media (max-width: $breakpoint-stack) {
+    flex: 1 1 100%; // Force full width stacking
+    // margin-bottom can be added here if you want spacing between stacked items
+    // margin-bottom: 20px;
+  }
+}
+
+.upsell-message {
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.65;
+  font-weight: 700;
+}
+
+body:not(#en__pagebuilder) {
+  .upsell-message {
+    margin-bottom: 20px;
+    margin-left: -7px;
+    margin-right: -7px;
+
+    .recurring-frequency-y-show {
+      margin: 0;
+      padding: 6px 16px;
+      position: relative;
+    }
+
+    .recurring-frequency-y-hide {
+      background-color: var(--color_orange);
+      color: var(--color_white);
+      margin: 0;
+      padding: 6px 16px;
+      position: relative;
+      &::before {
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background: var(--color_orange);
+        border-top: 1px solid var(--color_primary);
+        border-left: 1px solid var(--color_primary);
+        border-right: 1px solid var(--color_orange);
+        border-bottom: 1px solid var(--color_orange);
+        box-sizing: border-box;
+        top: -6px; // position so the bottom tip touches the top edge
+        left: 75%;
+        transform: translateX(-75%) rotate(45deg); // square turned into a diamond (up arrow)
+      }
+    }
+  }
+}
+
+.blue-link {
+  a {
+    color: var(--color-ats-blue);
+    text-decoration: none;
+    font-weight: 600;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Optional: Remove default margins from the first and last columns in a row on larger screens if needed
+// .engrid-row {
+//   .engrid-col:first-child {
+//     margin-left: 0;
+//   }
+//   .engrid-col:last-child {
+//     margin-right: 0;
+//   }
+// }

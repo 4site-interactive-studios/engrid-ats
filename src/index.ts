@@ -1,20 +1,21 @@
-import {
-  Options,
-  App,
-  DonationAmount,
-  DonationFrequency,
-  EnForm,
-} from "@4site/engrid-scripts"; // Uses ENGrid via NPM
 // import {
 //   Options,
 //   App,
 //   DonationAmount,
 //   DonationFrequency,
 //   EnForm,
-// } from "../../engrid/packages/scripts"; // Uses ENGrid via Visual Studio Workspace
+// } from "@4site/engrid-scripts"; // Uses ENGrid via NPM
+import {
+  Options,
+  App,
+  DonationAmount,
+  DonationFrequency,
+  EnForm,
+} from "../../engrid/packages/scripts"; // Uses ENGrid via Visual Studio Workspace
 
 import "./sass/main.scss";
 import DonationLightboxForm from "./scripts/donation-lightbox-form";
+import MultistepForm from "./scripts/multistep-form";
 import { customScript } from "./scripts/main";
 
 const options: Options = {
@@ -31,10 +32,11 @@ const options: Options = {
   Debug: App.getUrlParameter("debug") === "true",
   Placeholders: {
     ".en__field--donationAmt.en__field--withOther .en__field__input--other":
-      "Custom Amount",
+      "Other",
     "input#en__field_supporter_phoneNumber2": "Phone Number (Optional)",
   },
   onLoad: () => {
+    new MultistepForm();
     (<any>window).DonationLightboxForm = DonationLightboxForm;
     new DonationLightboxForm(DonationAmount, DonationFrequency, App);
     customScript(App, EnForm);
