@@ -160,7 +160,14 @@
   @for $i from 1 through 6 {
     &:not([data-engrid-multistep-active-step="#{$i}"]):not([data-engrid-multistep-expand="true"]) {
       [data-multistep-step="#{$i}"] {
-        display: none !important;
+        overflow: hidden;
+        position: absolute;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        width: 1px;
+        margin: -1px;
+        padding: 0;
+        border: 0;
       }
     }
   }
@@ -314,7 +321,14 @@
       &[data-engrid-multistep-active-step="#{$i}"] {
         @for $j from ($i + 1) through 6 {
           [data-multistep-step="#{$j}"] {
-            display: none !important;
+            overflow: hidden;
+            position: absolute;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            width: 1px;
+            margin: -1px;
+            padding: 0;
+            border: 0;
           }
         }
 
@@ -322,7 +336,14 @@
         @if $i > 1 {
           @for $j from 1 through ($i - 1) {
             [data-multistep-step="#{$j}"] .multistep-button-container {
-              display: none !important;
+              overflow: hidden;
+              position: absolute;
+              clip: rect(0 0 0 0);
+              height: 1px;
+              width: 1px;
+              margin: -1px;
+              padding: 0;
+              border: 0;
             }
           }
         }
