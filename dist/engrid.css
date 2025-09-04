@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, September 3, 2025 @ 10:35:40 ET
+ *  Date: Wednesday, September 3, 2025 @ 16:13:07 ET
  *  By: fernando
  *  ENGrid styles: v0.22.4
  *  ENGrid scripts: v0.22.10
@@ -8821,7 +8821,7 @@ body:not(#en__pagebuilder) .upsell-message .recurring-frequency-y-hide:before{
   left:21px;
 }
 @media screen and (max-width:1023px){
-  [data-engrid-theme=ats][data-engrid-multistep]:not([data-engrid-multistep-active-step="1"]):not([data-engrid-multistep-expand=true]) .body-banner,[data-engrid-theme=ats][data-engrid-multistep]:not([data-engrid-multistep-active-step="1"]):not([data-engrid-multistep-expand=true]) .body-title,[data-engrid-theme=ats][data-engrid-multistep]:not([data-engrid-multistep-active-step="1"]):not([data-engrid-multistep-expand=true]) .body-top{
+  [data-engrid-theme=ats][data-engrid-multistep]:not([data-engrid-last-page]):not([data-engrid-multistep-active-step="1"]):not([data-engrid-multistep-expand=true]) .body-banner,[data-engrid-theme=ats][data-engrid-multistep]:not([data-engrid-last-page]):not([data-engrid-multistep-active-step="1"]):not([data-engrid-multistep-expand=true]) .body-title,[data-engrid-theme=ats][data-engrid-multistep]:not([data-engrid-last-page]):not([data-engrid-multistep-active-step="1"]):not([data-engrid-multistep-expand=true]) .body-top{
     display:none !important;
   }
 }

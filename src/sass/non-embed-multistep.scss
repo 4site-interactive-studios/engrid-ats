@@ -259,7 +259,7 @@
   }
 
   @media screen and (max-width: 1023px) {
-    &:not([data-engrid-multistep-active-step="1"]):not([data-engrid-multistep-expand="true"]) {
+    &:not([data-engrid-last-page]):not([data-engrid-multistep-active-step="1"]):not([data-engrid-multistep-expand="true"]) {
       .body-title,
       .body-banner,
       .body-top {
