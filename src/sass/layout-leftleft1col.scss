@@ -1,0 +1,11 @@
+/* leftleft1col layout adjustments */
+&[data-engrid-layout="leftleft1col"] {
+  --engrid__body-main_background-color: var(--color_white);
+  --engrid__body-title_padding: 0 29px;
+  --engrid__body-main_padding: 0 29px 29px;
+  --engrid__body-top_padding: 29px 29px 0;
+
+  .content-header {
+    grid-column: bc;
+  }
+}

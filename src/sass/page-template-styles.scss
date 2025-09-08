@@ -34,13 +34,14 @@
   --engrid__page_background-color: var(--color_light-blue);
 
   // Desktop/base spacing
+  --engrid__content-header_background-color: var(--color_white);
   --engrid__content-header_padding: 30px 64px;
   --engrid__content-header_margin: 0 auto;
   --engrid__content-footer_padding: 48px 64px;
   --engrid__content-footer_margin: 0 auto;
   --engrid__content-footer_background-color: var(--color_primary);
   --engrid__body_padding: 0 64px;
-  --engrid__body-title_padding: 96px 29px 20px;
+  --engrid__body-title_padding: 96px 29px 29px;
   --engrid__body-title_margin: 0 auto;
   --engrid__body-top_margin: 0 auto;
   --engrid__body-main_padding: 96px 64px;
@@ -48,7 +49,7 @@
   --engrid__body-main_background-color: var(--color_light-blue);
 
   --engrid__body-banner_padding: var(--engrid__body_padding);
-  --engrid__body-top_padding: 0 20px 64px;
+  --engrid__body-top_padding: 29px 29px 64px;
 
   // TYPOGRAPHY
   --default_color: var(--color_navy);
@@ -134,8 +135,8 @@
   --checkbox_width: 20px;
   --checkbox_height: 20px;
   --checkbox_border-radius: 0;
-  --checkbox_padding-top: 0;
-  --checkbox_content_checked: url('data:image/svg+xml,<svg width="18" height="13" viewBox="0 0 18 13" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0.675049" y="6.34448" width="2" height="8.30769" rx="1" transform="rotate(-45 0.675049 6.34448)" fill="white"/><path d="M15.6388 1.1772C16.0294 0.786675 16.6625 0.786675 17.0531 1.1772C17.4436 1.56772 17.4436 2.20089 17.0531 2.59141L6.99038 12.6541L5.57617 11.2399L15.6388 1.1772Z" fill="white"/></svg>');
+  --checkbox_padding-top: 3px;
+  --checkbox_content_checked: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.13818" y="7.25787" width="1.37342" height="5.70498" transform="rotate(-49.1546 1.13818 7.25787)" fill="white"/><path d="M11.5791 2.4549L12.6181 3.35314L5.77758 11.2652L4.73862 10.367L11.5791 2.4549Z" fill="white"/></svg>');
   --checkbox_color: var(--color_primary);
   --checkbox_background-color: var(--color_white);
   --checkbox_border-color: var(--color_primary);
@@ -174,9 +175,17 @@
   --recurring-frequency__button_color_checked: var(--color_white);
   --recurring-frequency__button_border-color_checked: var(--color_primary);
   --recurring-frequency__button_background-color_checked: var(--color_primary);
+  // RECURRING FREQUENCY:HOVER
+  --recurring-frequency__button_background-color_hover: lighten(
+    var(--color_primary),
+    5%
+  );
 
   // GIVE BY SELECT:HOVER
-  --give-by-select__button_background-color_hover: var(--color_primary);
+  --give-by-select__button_background-color_hover: lighten(
+    var(--color_primary),
+    5%
+  );
   --give-by-select__button_border-color_hover: var(--color_primary);
   --give-by-select__button_color_hover: var(--color_white);
   // GIVE BY SELECT:CHECKED
@@ -192,6 +201,11 @@
   --donation-amount__button_color_checked: var(--color_white);
   --donation-amount__button_border-color_checked: var(--color_primary);
   --donation-amount__button_background-color_checked: var(--color_primary);
+  // DONATE BUTTONS:HOVER
+  --donation-amount__button_background-color_hover: lighten(
+    var(--color_primary),
+    5%
+  );
 
   // SUBMIT BUTTON
   --submit__button_border-color: var(--color_orange);
@@ -232,6 +246,12 @@
     --recurring-frequency__button_font-size: 24px;
     --submit__button_font-size: 26px;
     --donation-amount__button_count: 2;
+    --h1_font-size: 28px;
+    --h1_line-height: 36px;
+    --h2_font-size: 24px;
+    --h2_line-height: 32px;
+    --h3_font-size: 20px;
+    --h3_line-height: 28px;
   }
 
   * {
@@ -274,17 +294,31 @@
   }
 
   .radio-to-buttons_donationAmt .en__field--donationAmt {
+    div:not(.en__field__item--other) .en__field__label--item:after {
+      opacity: 1;
+    }
     input[type="radio"] + label {
+      box-sizing: content-box;
       outline: none;
+      align-items: baseline;
+      height: 42px;
     }
 
     .en__field__input--other {
+      box-sizing: content-box;
       --input_padding: var(--donation-amount__button_padding);
+      --input_placeholder-font-weight: 700;
+      --input_placeholder-color: var(--donation-amount__button_color);
+      --donation-amount__button_font-size: 28px;
+      height: 42px;
       font-size: var(--donation-amount__button_font-size);
       font-weight: 700;
       justify-content: center;
       line-height: var(--donation-amount__button_line-height);
       outline: none;
+      &:hover {
+        background-color: var(--donation-amount__button_background-color_hover);
+      }
     }
 
     .en__field__item--other {
@@ -295,13 +329,16 @@
         font-weight: 700;
         border-color: var(--donation-amount__button_border-color);
         line-height: 1;
+        @media screen and (max-width: 600px) {
+          padding-left: 48px;
+        }
       }
 
       &:before {
         content: "$";
         display: block;
         height: 0;
-        left: 45px;
+        left: 43px;
         line-height: 0;
         position: absolute;
         top: calc(50% - 3px);
@@ -310,6 +347,9 @@
         font-family: var(--donation-amount__button_font-family);
         font-weight: var(--donation-amount__button_font-weight);
         // line-height: var(--donation-amount__button_line-height);
+        @media screen and (max-width: 600px) {
+          left: 33px;
+        }
       }
     }
 
@@ -321,6 +361,9 @@
 
   // Give by select adjustments
   .give-by-select {
+    --button_background-color_hover: var(
+      --give-by-select__button_background-color_hover
+    );
     // Responsive variable
     @media screen and (max-width: 600px) {
       --give-by-select__button_count: 1;
@@ -343,6 +386,11 @@
       padding: 12px 22px;
       height: 72px;
       max-height: 72px;
+    }
+    input[type="radio"]:checked + label {
+      img.paypal {
+        filter: brightness(0) invert(1);
+      }
     }
 
     // Label flex direction override
@@ -383,6 +431,14 @@
     text-align: center;
     position: relative;
 
+    @media screen and (max-width: 600px) {
+      padding: 48px 20px;
+      .footer-logo img {
+        margin-top: 0;
+        margin-bottom: 32px;
+      }
+    }
+
     * {
       box-sizing: border-box;
       color: var(--color_white);
@@ -392,7 +448,7 @@
       font-size: 18px;
       line-height: 1.65;
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 32px;
       margin-top: 0;
     }
 
@@ -405,14 +461,17 @@
     }
     .footer-logo {
       img {
+        display: block;
         margin-top: -12px;
         width: 330px;
+        filter: brightness(0) invert(1);
+        max-width: 90%;
       }
     }
 
     .footer-links {
-      margin-top: 25px;
-      margin-bottom: 20px;
+      margin-top: 32px;
+      margin-bottom: 32px;
 
       a {
         text-decoration: underline;
@@ -436,6 +495,13 @@
 
     p {
       font-size: 12px;
+    }
+    .footer-info,
+    .credit {
+      text-align: left;
+      p {
+        margin-bottom: 10px !important;
+      }
     }
   }
 
@@ -540,5 +606,193 @@
     display: flex;
     justify-content: flex-end;
   }
+  .en__component--copyblock {
+    p {
+      margin-bottom: 1em;
+      &:last-child {
+        margin-bottom: 0;
+      }
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+  // ECARD
+  // Custom property for ecard thumbnail border width
+  --ecard_thumnail-border-width: 5px;
+  &[data-engrid-embedded-ecard="true"] {
+    .en__component--ecardblock h2 {
+      font-size: 20px;
+      line-height: 1.5;
+    }
+  }
+
+  // Prevents modals like the eCard preview modal from being hidden behind the header and footer
+  &[data-ecard-preview="visible"]:not(#en__pagebuilder):not(.freeze)
+    .content-footer,
+  &[data-ecard-preview="visible"]:not(#en__pagebuilder):not(.freeze)
+    .content-footerSpacer,
+  &[data-ecard-preview="visible"]:not(#en__pagebuilder):not(.freeze)
+    .content-header,
+  &[data-ecard-preview="visible"]:not(#en__pagebuilder):not(.freeze)
+    .content-preFooter {
+    z-index: 3;
+  }
+
+  // Hide customize ecard section when not e-card notification type is selected
+  &:not(#en__pagebuilder):not([data-engrid-debug])
+    .customize-ecard:not([notify-selection="e-card" i]) {
+    display: none;
+  }
+
+  // Put the single recipient ecard fields on two lines
+  .en__ecardrecipients__detail {
+    flex-direction: column;
+  }
+
+  .en__ecardrecipients__email,
+  .en__ecardrecipients__name {
+    width: 100% !important;
+    margin-bottom: var(--fields_spacing-block);
+  }
+
+  // eCard Recipient Name and Email fields
+  .en__ecardrecipients__name input,
+  .en__ecardrecipients__email input {
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: var(--fields_spacing-block);
+    margin-left: 0;
+    padding: var(--input_padding);
+    width: 100%;
+  }
+
+  // Hide the button until it gets moved outside and into its own wrapper
+  .en__ecardrecipients__email button {
+    display: none;
+  }
+
+  // Hide the Recipient List until there a recipient added to it
+  .en__ecardrecipients__list:empty {
+    display: none;
+  }
+
+  // Limit ecards to a single recipient (commented out)
+  // .en__ecardrecipients__email button,
+  // .en__ecardrecipients__list {
+  //   display: none;
+  // }
+
+  .en__ecarditems h2 {
+    margin-top: 0;
+  }
+
+  .en__ecarditems__button {
+    position: static;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    height: auto;
+    margin-top: 0 !important;
+    width: auto;
+    font-family: var(--donation-amount__button_font-family);
+    padding: 15px !important;
+    line-height: 1 !important;
+  }
+
+  .en__ecardrecipients__list {
+    margin: 0px -0.5rem 0px -0.5rem;
+  }
+
+  // Commented out margin adjustments
+  // .en__ecardrecipients__futureDelivery {
+  //   margin-bottom: 40px;
+  // }
+
+  // .en__ecardrecipients {
+  //   margin-bottom: 40px;
+  // }
+
+  .ecardrecipient__remove {
+    align-items: center;
+    justify-content: flex-end;
+    display: flex;
+  }
+
+  .en__ecardrecipients__recipient {
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+    width: 100%;
+  }
+
+  .en__ecardrecipients__recipient:hover {
+    background-color: var(--button_background-color_hover);
+  }
+
+  .en__ecardrecipients__recipient input {
+    background-color: transparent;
+  }
+
+  .en__ecardrecipients__recipient .ecardrecipient__remove button {
+    margin-bottom: 0px;
+    color: var(--error__color);
+    border-radius: 100%;
+    font-family: sans-serif;
+    background: var(--error__color_faded);
+    line-height: initial;
+    font-size: 9px !important;
+    height: 18px;
+    width: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--error__color);
+    right: 0;
+  }
+
+  .en__ecardrecipients__recipient .ecardrecipient__remove {
+    width: 2rem;
+  }
+
+  .ecardrecipient__name {
+    padding-right: 1rem;
+    mask-image: linear-gradient(to right, #000 75%, #fff0 calc(100% - 1rem));
+    outline: none;
+  }
+
+  // Commented out grid layout for email field
+  // .en__ecardrecipients__email {
+  //   display: grid;
+  //   gap: 0 3rem;
+  //   grid-auto-columns: 1fr;
+  //   grid-auto-rows: 1fr;
+  //   grid-template-areas:
+  //     "ecardrecipients__email_label ecardrecipients__email_button"
+  //     "ecardrecipients__email_input ecardrecipients__email_button";
+  //   grid-template-columns: 1fr 20px;
+  //   grid-template-rows: min-content 1fr;
+
+  //   button {
+  //     grid-area: ecardrecipients__email_button;
+  //   }
+  //   label {
+  //     grid-area: ecardrecipients__email_label;
+  //   }
+  //   input {
+  //     grid-area: ecardrecipients__email_input;
+  //   }
+  // }
+
+  // Next page copy styling for ecard pages
+  .ecard-next-page-copy {
+    padding-left: min(calc(var(--fields_spacing-inline) * 12), 10vw);
+    padding-right: min(calc(var(--fields_spacing-inline) * 12), 10vw);
+  }
+  /* All Opt-in Questions that are Radio Selects */
+  .en__field--radio.en__field--question .en__field__element--radio,
+  .en__field--radio.en__field--recnzegft .en__field__element--radio {
+    flex-direction: column;
+    align-items: self-start;
+  }
   @import "./layout-centercenter2col";
+  @import "./layout-leftleft1col";
 }

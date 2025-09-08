@@ -121,8 +121,8 @@
     color: #333;
     font-size: 20px;
     font-weight: bold;
-    padding: 10px 0 6px;
-    border-bottom: 4px solid transparent;
+    padding: 10px 0 20px;
+    border-bottom: 2px solid transparent;
     @media screen and (max-width: 600px) {
       font-size: 16px;
       padding: 6px 0 4px;
@@ -207,14 +207,17 @@
     padding-bottom: var(--submit__button_padding-bottom);
     padding-top: var(--submit__button_padding-top);
     text-transform: var(--submit__button_text-transform);
-    transition: opacity 0.2s;
+    transition: all 0.2s;
     height: 72px;
     justify-content: center;
     align-items: center;
     display: flex;
 
     &:hover {
-      opacity: 0.6;
+      background-color: var(--color-ats-blue);
+      border-color: var(--color-ats-blue);
+      color: var(--color_white);
+      opacity: 1;
     }
   }
 

@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, September 3, 2025 @ 16:13:07 ET
+ *  Date: Monday, September 8, 2025 @ 01:46:47 ET
  *  By: fernando
  *  ENGrid styles: v0.22.4
  *  ENGrid scripts: v0.22.10
@@ -30154,14 +30154,14 @@ class CheckboxLabel {
   }
   run() {
     this.checkBoxesLabels.forEach(checkboxLabel => {
-      var _a;
-      const labelText = (_a = checkboxLabel.textContent) === null || _a === void 0 ? void 0 : _a.trim();
+      const labelHTML = checkboxLabel.innerHTML.trim();
       const checkboxContainer = checkboxLabel.nextElementSibling;
       const checkboxLabelElement = checkboxContainer.querySelector("label:last-child");
-      if (!checkboxLabelElement || !labelText) return;
-      checkboxLabelElement.textContent = labelText;
+      if (!checkboxLabelElement || !labelHTML) return;
+      checkboxLabelElement.innerHTML = `<div class="engrid-custom-checkbox-label">${labelHTML}</div>`;
+      // Remove the original label element
       checkboxLabel.remove();
-      this.logger.log(`Set checkbox label to "${labelText}"`);
+      this.logger.log(`Set checkbox label to "${labelHTML}"`);
     });
   }
 }
@@ -30697,7 +30697,7 @@ class FrequencyUpsell {
   }
 }
 ;// ../engrid/packages/scripts/dist/version.js
-const AppVersion = "0.22.17";
+const AppVersion = "0.22.18";
 ;// ../engrid/packages/scripts/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
 
@@ -44383,6 +44383,132 @@ const customScript = function (App, EnForm) {
         break;
     }
   });
+  /**
+   * Function to rearrange eCard related elements on the page.
+   * Moves .en__ecarditems__action to come after .en__ecardmessage and
+   * moves .en__ecardrecipients__futureDelivery to come after .en__ecardrecipients.
+   */
+  function rearrangeEcardElements() {
+    // Get the elements
+    const ecardItemsAction = document.querySelector(".en__ecarditems__action");
+    const ecardMessage = document.querySelector(".en__ecardmessage");
+    const ecardRecipientsFutureDelivery = document.querySelector(".en__ecardrecipients__futureDelivery");
+    const ecardRecipients = document.querySelector(".en__ecardrecipients");
+
+    // Move .en__ecarditems__action so it comes after .en__ecardmessage
+    if (ecardItemsAction && ecardMessage) {
+      ecardMessage.insertAdjacentElement("afterend", ecardItemsAction);
+    }
+
+    // Move .en__ecardrecipients__futureDelivery so it comes after .en__ecardrecipients
+    if (ecardRecipientsFutureDelivery && ecardRecipients) {
+      ecardRecipients.insertAdjacentElement("afterend", ecardRecipientsFutureDelivery);
+    }
+  }
+
+  // Call the function
+  rearrangeEcardElements();
+
+  // On eCard pages, change the label of the "Add contact" button
+  const ecardAddRecipeintButton = document.querySelector(".en__ecarditems__addrecipient");
+  if (ecardAddRecipeintButton) {
+    ecardAddRecipeintButton.textContent = "Add recipient";
+  }
+
+  // On eCard pages, add a label to the recipients list
+  const ecardRecipientList = document.querySelector(".en__ecardrecipients__list");
+  if (ecardRecipientList) {
+    const label = document.createElement("h2");
+    label.textContent = "Recipients list";
+    label.id = "recipients-list-label";
+    label.setAttribute("for", "en__ecardrecipients__list");
+    ecardRecipientList.setAttribute("aria-labelledby", "recipients-list-label");
+    ecardRecipientList.parentNode.insertBefore(label, ecardRecipientList);
+  }
+
+  //On eCard pages, move the "Add recipients" button out of its current wrapper and add supporting button classes
+  const addRecipientButton = document.querySelector(".en__ecarditems__addrecipient");
+  const emailDiv = document.querySelector(".en__ecardrecipients__email");
+  if (addRecipientButton && emailDiv) {
+    addRecipientButton.classList.add("button");
+    const wrapperDiv = document.createElement("div");
+    wrapperDiv.classList.add("en__ecardrecipients__button");
+
+    // Remove the button from its current position
+    addRecipientButton.parentNode.removeChild(addRecipientButton);
+
+    // Wrap the button with the new div
+    wrapperDiv.appendChild(addRecipientButton);
+
+    // Insert the wrapped button after the email div
+    emailDiv.parentNode.insertBefore(wrapperDiv, emailDiv.nextSibling);
+  }
+
+  // On eCard pages, when the "Add recipients" button is clicked, remove any values in the Add Recipient Name and Email field
+  // Hide the recipients list header and list until there are recipients added
+  // On eCard pages, simulate full field errors on the eCard Recipient name field and email field
+
+  const addRecipientButton2 = document.querySelector(".en__ecarditems__addrecipient");
+  const nameInput = document.querySelector(".en__ecardrecipients__name input");
+  const emailInput = document.querySelector(".en__ecardrecipients__email input");
+  const recipientsList = document.querySelector(".en__ecardrecipients__list");
+  const recipientsListLabel = document.querySelector("#recipients-list-label");
+  const emailParent = document.querySelector(".en__ecardrecipients__email");
+  const nameParent = document.querySelector(".en__ecardrecipients__name");
+  if (addRecipientButton2 && nameInput && emailInput && recipientsList && recipientsListLabel && emailParent && nameParent) {
+    let previousRecipientCount = document.querySelectorAll(".en__ecardrecipients__recipient .ecardrecipient__email").length;
+    const clearInputs = () => {
+      let currentRecipientCount = document.querySelectorAll(".en__ecardrecipients__recipient .ecardrecipient__email").length;
+      if (currentRecipientCount > previousRecipientCount) {
+        nameInput.value = "";
+        emailInput.value = "";
+      }
+      previousRecipientCount = currentRecipientCount;
+    };
+    addRecipientButton2.addEventListener("click", clearInputs);
+    addRecipientButton2.addEventListener("touchend", clearInputs);
+    addRecipientButton2.addEventListener("keydown", clearInputs);
+    const toggleElementsVisibility = () => {
+      const displayValue = recipientsList.innerHTML.trim() ? "block" : "none";
+      recipientsListLabel.style.display = displayValue;
+      recipientsList.style.display = displayValue;
+    };
+
+    // Initially set the visibility of the label and the recipients list
+    toggleElementsVisibility();
+
+    // Create a MutationObserver instance to monitor changes in the content of the recipients list
+    const listObserver = new MutationObserver(toggleElementsVisibility);
+
+    // Start observing the recipients list for changes in its content
+    listObserver.observe(recipientsList, {
+      childList: true,
+      subtree: true
+    });
+    const toggleValidationClass = (element, parent) => mutations => {
+      for (const mutation of mutations) {
+        if (mutation.type === "attributes" && mutation.attributeName === "class") {
+          if (element.classList.contains("invalid")) {
+            parent.classList.add("en__field--validationFailed");
+          } else {
+            parent.classList.remove("en__field--validationFailed");
+          }
+        }
+      }
+    };
+
+    // Create MutationObserver instances to monitor changes in the input's attributes
+    const inputObserver1 = new MutationObserver(toggleValidationClass(emailInput, emailParent));
+    const inputObserver2 = new MutationObserver(toggleValidationClass(nameInput, nameParent));
+
+    // Start observing the inputs for changes in their attributes
+    inputObserver1.observe(emailInput, {
+      attributes: true
+    });
+    inputObserver2.observe(nameInput, {
+      attributes: true
+    });
+  }
 };
 ;// ./src/index.ts
 // import {

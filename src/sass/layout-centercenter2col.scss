@@ -6,4 +6,12 @@
       justify-content: flex-start;
     }
   }
+
+  .en__component--copyblock {
+    &.header-logo {
+      p {
+        margin-bottom: 29px !important;
+      }
+    }
+  }
 }
