@@ -1,5 +1,7 @@
 /* centercenter2col layout adjustments */
 &[data-engrid-layout="centercenter2col"] {
+  --body-side-padding: 29px;
+  --engrid__body_padding: 0 var(--body-side-padding);
   // Narrow body column adjustments similar to leftleft1col
   @media screen and (max-width: $centercenter2col_body-column_max-width) {
     .en__field--donationAmt .en__field__element {

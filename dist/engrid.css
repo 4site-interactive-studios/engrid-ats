@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, September 8, 2025 @ 01:46:47 ET
+ *  Date: Monday, September 8, 2025 @ 01:54:32 ET
  *  By: fernando
  *  ENGrid styles: v0.22.4
  *  ENGrid scripts: v0.22.10
@@ -8394,6 +8394,10 @@ body:not(#en__pagebuilder) .upsell-message .recurring-frequency-y-hide:before{
 [data-engrid-theme=ats] .en__field--radio.en__field--question .en__field__element--radio,[data-engrid-theme=ats] .en__field--radio.en__field--recnzegft .en__field__element--radio{
   align-items:self-start;
   flex-direction:column;
+}
+[data-engrid-theme=ats][data-engrid-layout=centercenter2col]{
+  --body-side-padding:29px;
+  --engrid__body_padding:0 var(--body-side-padding);
 }
 @media screen and (max-width:1380px){
   [data-engrid-theme=ats][data-engrid-layout=centercenter2col] .en__field--donationAmt .en__field__element{
