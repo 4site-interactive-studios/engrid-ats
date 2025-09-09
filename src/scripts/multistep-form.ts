@@ -1,4 +1,4 @@
-import { ENGrid, EngridLogger } from "@4site/engrid-scripts";
+import { EnForm, ENGrid, EngridLogger } from "@4site/engrid-scripts";
 import "./confetti";
 
 declare global {
@@ -28,8 +28,10 @@ export default class MultistepForm {
   );
   private validators: Array<ENValidator> = [];
   private contentShouldExpand: boolean = false;
+  private _form: EnForm;
 
-  constructor() {
+  constructor(EnFormInstance: EnForm) {
+    this._form = EnFormInstance;
     if (this.shouldRun()) {
       this.logger.log("MultistepForm running");
       if (
@@ -130,6 +132,22 @@ export default class MultistepForm {
         this.activateStep(button.dataset.multistepChangeStep ?? "");
       });
     });
+    this._form.onValidate.subscribe(this.checkErrorsOnValidate.bind(this));
+    // Listen for messages from iFrame Child with action = recipient_error
+    window.addEventListener("message", (event) => {
+      if (event.origin !== location.origin || !event.data.action) return;
+      console.log(event);
+      if (event.data && event.data.action === "ecard_validation_error") {
+        this.logger.log(
+          "iFrame Event 'ecard_validation_error' - Activating step 1 with bypassValidation"
+        );
+        this.activateStep("1", true);
+        setTimeout(() => {
+          // Scroll 200px up to show the error message
+          window.scrollBy({ top: -200, behavior: "smooth" });
+        }, 200);
+      }
+    });
   }
 
   private inIframe() {
@@ -172,7 +190,7 @@ export default class MultistepForm {
       !this.validateStepsBetweenCurrentAndTargetStep(activeStep, targetStep)
     ) {
       const field: HTMLElement | null = document.querySelector(
-        ".en__field--validationFailed"
+        ".en__field--validationFailed, .vgs-collect-container__invalid"
       );
       const invalidStep =
         field
@@ -393,7 +411,37 @@ export default class MultistepForm {
       window.EngagingNetworks.require._defined.enjs.checkSubmissionFailed()
     ) {
       this.logger.log("Server side error detected");
-      this.activateStep("3", true);
+      this.activateStep("2", true);
     }
+  }
+  private checkErrorsOnValidate() {
+    this.logger.log("Validation Event 'onValidate' - Checking for errors");
+    setTimeout(() => {
+      const field: HTMLElement | null = document.querySelector(
+        ".en__field--validationFailed"
+      );
+      if (!this._form.validate && field) {
+        const invalidStep =
+          field
+            ?.closest(".en__component--formblock")
+            ?.getAttribute("data-multistep-step") ?? "1";
+        ENGrid.setBodyData("multistep-active-step", invalidStep);
+        this.logger.log(
+          `Validation Event 'onValidate' - Found error on step ${invalidStep}. Going to that step.`
+        );
+        const scrollToError = field ? field.getBoundingClientRect().top : 0;
+
+        // Parent pages listens for this message and scrolls to the correct position
+        if (this.inIframe()) {
+          this.scrollTo(scrollToError);
+          this.logger.log(
+            `iFrame Event 'scrollTo' - Position of top of first error ${scrollToError} px`
+          ); // check the message is being sent correctly
+        } else {
+          field.scrollIntoView({ behavior: "smooth" });
+        }
+        this.activateStep(invalidStep, true);
+      }
+    }, 300);
   }
 }

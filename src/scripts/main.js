@@ -1,4 +1,17 @@
 export const customScript = function (App, EnForm) {
+  if (App.getPageType() === "ECARD" && App.hasBodyData("embedded-ecard")) {
+    window.addEventListener("message", (e) => {
+      if (e.origin !== location.origin || !e.data.action) return;
+      // If we get a recipient error from the ENgrid component, we need to notify the parent window for the multistep form to handle it
+      if (e.data.action === "recipient_error") {
+        window.parent.postMessage(
+          { action: "ecard_validation_error" },
+          location.origin
+        );
+      }
+    });
+  }
+
   /*
    * Updates the label of a field to indicate if it is required.
    * @param {HTMLElement} field - The ".en__field" element to update.

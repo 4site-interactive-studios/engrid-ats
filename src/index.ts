@@ -1,17 +1,17 @@
-// import {
-//   Options,
-//   App,
-//   DonationAmount,
-//   DonationFrequency,
-//   EnForm,
-// } from "@4site/engrid-scripts"; // Uses ENGrid via NPM
 import {
   Options,
   App,
   DonationAmount,
   DonationFrequency,
   EnForm,
-} from "../../engrid/packages/scripts"; // Uses ENGrid via Visual Studio Workspace
+} from "@4site/engrid-scripts"; // Uses ENGrid via NPM
+// import {
+//   Options,
+//   App,
+//   DonationAmount,
+//   DonationFrequency,
+//   EnForm,
+// } from "../../engrid/packages/scripts"; // Uses ENGrid via Visual Studio Workspace
 
 import "./sass/main.scss";
 import DonationLightboxForm from "./scripts/donation-lightbox-form";
@@ -36,10 +36,10 @@ const options: Options = {
     "input#en__field_supporter_phoneNumber2": "Phone Number (Optional)",
   },
   onLoad: () => {
-    new MultistepForm();
     (<any>window).DonationLightboxForm = DonationLightboxForm;
     new DonationLightboxForm(DonationAmount, DonationFrequency, App);
     customScript(App, EnForm);
+    new MultistepForm(EnForm.getInstance());
   },
   onResize: () => App.log("Starter Theme Window Resized"),
   VGS: {
