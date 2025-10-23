@@ -35,6 +35,11 @@ const options: Options = {
       "Other",
     "input#en__field_supporter_phoneNumber2": "Phone Number (Optional)",
   },
+  MinAmount: 5,
+  MaxAmount: 100000,
+  MinAmountMessage: "Amount must be at least $5 - Contact us for assistance",
+  MaxAmountMessage:
+    "Amount must be less than $100,000 - Contact us for assistance",
   onLoad: () => {
     (<any>window).DonationLightboxForm = DonationLightboxForm;
     new DonationLightboxForm(DonationAmount, DonationFrequency, App);
