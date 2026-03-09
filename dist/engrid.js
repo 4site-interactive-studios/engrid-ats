@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, March 9, 2026 @ 15:20:46 ET
+ *  Date: Monday, March 9, 2026 @ 15:54:48 ET
  *  By: nick
  *  ENGrid styles: v0.23.4
  *  ENGrid scripts: v0.24.3 -> ./../engrid/packages/scripts
@@ -19698,10 +19698,10 @@ class DataLayer {
     }
     if (window.pageJson) {
       let pageJson = window.pageJson;
-      if (engrid_ENGrid.getPageType() === "ECARD" && engrid_ENGrid.getOption("SuppressPurchaseEcard")) {
-        pageJson = pageJson.filter(entry => !this.giftFields.includes(entry.key));
-      }
       for (const property in pageJson) {
+        if (engrid_ENGrid.getPageType() === "ECARD" && engrid_ENGrid.getOption("SuppressPurchaseEcard") && this.giftFields.includes(property)) {
+          continue;
+        }
         const key = `EN_PAGEJSON_${property.toUpperCase()}`;
         const value = pageJson[property];
         dataLayerData[key] = this.transformJSON(value);
