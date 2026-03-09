@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, March 9, 2026 @ 15:07:22 ET
+ *  Date: Monday, March 9, 2026 @ 15:17:44 ET
  *  By: nick
  *  ENGrid styles: v0.23.4
  *  ENGrid scripts: v0.24.3 -> ./../engrid/packages/scripts
@@ -12978,7 +12978,7 @@ const OptionsDefaults = {
   UseAmountValidatorFromEN: false,
   SkipToMainContentLink: true,
   SrcDefer: true,
-  SupressPurchaseEcard: false,
+  SuppressPurchaseEcard: false,
   NeverBounceAPI: null,
   NeverBounceDateField: null,
   NeverBounceStatusField: null,
@@ -19689,8 +19689,8 @@ class DataLayer {
       // EN will chain together gift process data on the page json when redirecting from a completed donation to an ecard.
       // Since the ecard page can be embedded on the thank you page of a donation, this can cause confusion in the data layer with events 
       // firing for both the donation and the ecard on the same page.
-      if (engrid_ENGrid.getPageType() === "ECARD" && engrid_ENGrid.getOption("SupressPurchaseEcard")) {
-        this.logger.log("⛔ Gift process was detected BUT supressing EN_SUCCESSFUL_DONATIO event due to SupressPurchaseEcard option enabled");
+      if (engrid_ENGrid.getPageType() === "ECARD" && engrid_ENGrid.getOption("SuppressPurchaseEcard")) {
+        this.logger.log("⛔ Gift process was detected BUT suppressing EN_SUCCESSFUL_DONATION event due to SuppressPurchaseEcard option enabled");
         return;
       }
       this.logger.log("EN_SUCCESSFUL_DONATION");
@@ -19698,7 +19698,7 @@ class DataLayer {
     }
     if (window.pageJson) {
       let pageJson = window.pageJson;
-      if (engrid_ENGrid.getPageType() === "ECARD" && engrid_ENGrid.getOption("SupressPurchaseEcard")) {
+      if (engrid_ENGrid.getPageType() === "ECARD" && engrid_ENGrid.getOption("SuppressPurchaseEcard")) {
         pageJson = pageJson.filter(entry => !this.giftFields.includes(entry.key));
       }
       for (const property in pageJson) {
@@ -27233,7 +27233,7 @@ const options = {
   ThousandsSeparator: ",",
   MediaAttribution: true,
   SkipToMainContentLink: true,
-  SupressPurchaseEcard: true,
+  SuppressPurchaseEcard: true,
   SrcDefer: true,
   ProgressBar: true,
   Debug: App.getUrlParameter("debug") === "true",
