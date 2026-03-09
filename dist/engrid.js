@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, March 9, 2026 @ 15:17:44 ET
+ *  Date: Monday, March 9, 2026 @ 15:20:46 ET
  *  By: nick
  *  ENGrid styles: v0.23.4
  *  ENGrid scripts: v0.24.3 -> ./../engrid/packages/scripts
@@ -19691,10 +19691,10 @@ class DataLayer {
       // firing for both the donation and the ecard on the same page.
       if (engrid_ENGrid.getPageType() === "ECARD" && engrid_ENGrid.getOption("SuppressPurchaseEcard")) {
         this.logger.log("⛔ Gift process was detected BUT suppressing EN_SUCCESSFUL_DONATION event due to SuppressPurchaseEcard option enabled");
-        return;
+      } else {
+        this.logger.log("EN_SUCCESSFUL_DONATION");
+        this.addEndOfGiftProcessEventsToDataLayer();
       }
-      this.logger.log("EN_SUCCESSFUL_DONATION");
-      this.addEndOfGiftProcessEventsToDataLayer();
     }
     if (window.pageJson) {
       let pageJson = window.pageJson;
