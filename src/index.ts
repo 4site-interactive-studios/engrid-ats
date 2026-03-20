@@ -35,9 +35,9 @@ const options: Options = {
       "Other",
     "input#en__field_supporter_phoneNumber2": "Phone Number (Optional)",
   },
-  MinAmount: 5,
+  MinAmount: 10,
   MaxAmount: 100000,
-  MinAmountMessage: "Amount must be at least $5 - Contact us for assistance",
+  MinAmountMessage: "Amount must be at least $10 - Contact us for assistance",
   MaxAmountMessage:
     "Amount must be less than $100,000 - Contact us for assistance",
   onLoad: () => {
