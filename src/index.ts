@@ -27,6 +27,7 @@ const options: Options = {
   ThousandsSeparator: ",",
   MediaAttribution: true,
   SkipToMainContentLink: true,
+  SuppressPurchaseEcard: true,
   SrcDefer: true,
   ProgressBar: true,
   Debug: App.getUrlParameter("debug") === "true",

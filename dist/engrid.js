@@ -17,8 +17,8 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, March 20, 2026 @ 08:23:38 ET
- *  By: fernando
+ *  Date: Friday, March 20, 2026 @ 11:59:26 ET
+ *  By: 4Site
  *  ENGrid styles: v0.24.0
  *  ENGrid scripts: v0.24.5
  *
@@ -26408,6 +26408,7 @@ const options = {
   ThousandsSeparator: ",",
   MediaAttribution: true,
   SkipToMainContentLink: true,
+  SuppressPurchaseEcard: true,
   SrcDefer: true,
   ProgressBar: true,
   Debug: App.getUrlParameter("debug") === "true",
